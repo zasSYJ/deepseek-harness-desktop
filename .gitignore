@@ -1,0 +1,17 @@
+# 依赖与构建产物
+node_modules/
+dist/
+pnpm-store/
+resources/node.exe
+
+# 本地配置与日志
+.npmrc
+desktop-log.txt
+
+# 测试截图
+smoke.png
+packaged-smoke.png
+portable-smoke.png
+
+# 根目录成品 exe（发布到 Releases，不进仓库）
+/*.exe
