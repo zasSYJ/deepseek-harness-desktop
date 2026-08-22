@@ -6,6 +6,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -31,7 +34,7 @@ jobs:
           Copy-Item (Get-Command node.exe).Source resources\node.exe -Force
 
       - name: Build portable exe
-        run: pnpm run dist
+        run: pnpm exec electron-builder --win portable --publish never
 
       - name: Build installer (publish on tag)
         shell: pwsh
