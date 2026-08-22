@@ -9,6 +9,7 @@
 ## 特性
 
 - 双击即用：无需安装 Node.js，无需命令行
+- **识图能力**：默认接入官方最新多模态模型 DeepSeek-V4-Flash-Vision-Exp，图片识别、看图对话直接可用
 - 内置 Node 运行时与官方 DeepSeek Harness 本体（与 `npx @deepseek-ai/dsh web` 完全相同的官方界面）
 - 独立桌面窗口 + 系统托盘：点关闭按钮最小化到托盘，后台任务不中断
 - 单实例：重复打开时聚焦已有窗口
