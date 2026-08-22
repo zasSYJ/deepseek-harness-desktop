@@ -54,7 +54,7 @@
       "signAndEditExecutable": false
     },
     "portable": {
-      "artifactName": "DeepSeek-Harness-桌面版-${version}.exe"
+      "artifactName": "DeepSeek-Harness-Portable-${version}.exe"
     },
     "nsis": {
       "oneClick": true,

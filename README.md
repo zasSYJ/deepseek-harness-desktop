@@ -19,7 +19,7 @@
 到 [Releases](../../releases) 页面下载最新版本：
 
 - `DeepSeek-Harness-Setup-x.x.x.exe`：安装版（推荐），支持自动更新
-- `DeepSeek-Harness-桌面版-x.x.x.exe`：免安装版（不支持自动更新）
+- `DeepSeek-Harness-Portable-x.x.x.exe`：免安装版（不支持自动更新）
 
 > Windows 首次运行会提示"Windows 已保护你的电脑"。程序未签名，点击「更多信息 → 仍要运行」即可。
 
