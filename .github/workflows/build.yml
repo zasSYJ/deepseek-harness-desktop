@@ -15,6 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -32,8 +33,22 @@ jobs:
       - name: Build portable exe
         run: pnpm run dist
 
-      - name: Build installer
-        run: pnpm run dist:installer
+      - name: Build installer (publish on tag)
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF -like 'refs/tags/*') {
+            pnpm exec electron-builder --win nsis --publish always
+          } else {
+            pnpm run dist:installer
+          }
+
+      - name: Upload portable exe to release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          $tag = $env:GITHUB_REF -replace 'refs/tags/', ''
+          $exe = (Get-ChildItem dist -Filter 'DeepSeek-Harness-*.exe' | Where-Object { $_.Name -notlike '*Setup*' }).FullName
+          gh release upload $tag $exe --clobber
 
       - uses: actions/upload-artifact@v4
         with:

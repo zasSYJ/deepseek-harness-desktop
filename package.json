@@ -1,78 +1,105 @@
 {
-    "name":  "deepseek-harness-desktop",
-    "version":  "1.0.0",
-    "description":  "DeepSeek Harness 桌面版 - 把 dsh Web 打包成 Windows 桌面应用",
-    "main":  "main.js",
-    "author":  "DeepSeek Harness Desktop",
-    "license":  "MIT",
-    "scripts":  {
-                    "start":  "electron .",
-                    "dist":  "electron-builder --win portable",
-                    "dist:installer":  "electron-builder --win nsis"
-                },
-    "build":  {
-                  "appId":  "com.local.deepseek-harness-desktop",
-                  "productName":  "DeepSeek Harness 桌面版",
-                  "directories":  {
-                                      "output":  "dist"
-                                  },
-                  "files":  [
-                                "main.js",
-                                "package.json",
-                                "build/**",
-                                "node_modules/**"
-                            ],
-                  "asar":  false,
-                  "extraResources":  [
-                                         {
-                                             "from":  "resources/node.exe",
-                                             "to":  "node.exe"
-                                         }
-                                     ],
-                  "win":  {
-                              "icon":  "build/icon.ico",
-                              "target":  [
-                                             "portable"
-                                         ],
-                              "signAndEditExecutable":  false
-                          },
-                  "portable":  {
-                                   "artifactName":  "DeepSeek-Harness-桌面版-${version}.exe"
-                               },
-                  "nsis":  {
-                               "oneClick":  true,
-                               "shortcutName":  "DeepSeek Harness",
-                               "createDesktopShortcut":  true,
-                               "artifactName":  "DeepSeek-Harness-Setup-${version}.exe"
-                           },
-                  "npmRebuild":  false
-              },
-    "dependencies":  {
-                         "@deepseek-ai/cordis-plugin-group":  "1.0.1-rc.4",
-                         "@deepseek-ai/dsh":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-anonymous-user-id":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-atomic-write":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-bash-local":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-code-runtime":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-compaction":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-fs":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-invariants":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-output-retention":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-sandbox":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-scope":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-sdk-protocol":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-session-telemetry":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-session-title-llm":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-shell":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-spill":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-subagent-in-process-driver":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-subprocess":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-timeout":  "0.0.1-rc.5",
-                         "@deepseek-ai/dsh-workflow":  "0.0.1-rc.5"
-                     },
-    "devDependencies":  {
-                            "electron":  "^43.4.0",
-                            "electron-builder":  "^26.15.3"
-                        },
-    "packageManager":  "pnpm@11.19.0"
+  "name": "deepseek-harness-desktop",
+  "version": "1.1.0",
+  "description": "DeepSeek Harness 桌面版 - 把 dsh Web 打包成 Windows 桌面应用",
+  "main": "main.js",
+  "author": "DeepSeek Harness Desktop",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable",
+    "dist:installer": "electron-builder --win nsis"
+  },
+  "build": {
+    "appId": "com.local.deepseek-harness-desktop",
+    "productName": "DeepSeek Harness 桌面版",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "build/**",
+      "node_modules/**",
+      "!**/*.map",
+      "!**/*.md",
+      "!**/*.hh",
+      "!**/*.h",
+      "!**/.nycrc{,/**/*}",
+      "!**/.nycrc.yml",
+      "!**/__tests__{,/**/*}",
+      "!**/test{,/**/*}",
+      "!**/tests{,/**/*}",
+      "!**/fixtures{,/**/*}",
+      "!**/docs{,/**/*}",
+      "!**/*.spec.js",
+      "!**/*.test.js",
+      "!**/*.spec.cjs",
+      "!**/*.test.cjs",
+      "!**/*.spec.mjs",
+      "!**/*.test.mjs"
+    ],
+    "asar": false,
+    "extraResources": [
+      {
+        "from": "resources/node.exe",
+        "to": "node.exe"
+      }
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        "portable"
+      ],
+      "signAndEditExecutable": false
+    },
+    "portable": {
+      "artifactName": "DeepSeek-Harness-桌面版-${version}.exe"
+    },
+    "nsis": {
+      "oneClick": true,
+      "shortcutName": "DeepSeek Harness",
+      "createDesktopShortcut": true,
+      "artifactName": "DeepSeek-Harness-Setup-${version}.exe"
+    },
+    "npmRebuild": false,
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "zasSYJ",
+        "repo": "deepseek-harness-desktop"
+      }
+    ]
+  },
+  "dependencies": {
+    "@cfworker/json-schema": "4.1.1",
+    "@deepseek-ai/cordis-plugin-group": "1.0.1",
+    "@deepseek-ai/dsh": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-anonymous-user-id": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-atomic-write": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-authorization": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-bash-local": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-code-runtime": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-compaction": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-fs": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-invariants": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-output-retention": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-sandbox": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-scope": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-session-telemetry": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-session-title-llm": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-shell": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-spill": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-subagent-in-process-driver": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-timeout": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-workflow": "0.1.1-rc.2",
+    "electron-updater": "^6.8.9",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "electron": "^43.4.0",
+    "electron-builder": "^26.15.3"
+  },
+  "packageManager": "pnpm@11.19.0"
 }

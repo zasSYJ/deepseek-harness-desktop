@@ -1,0 +1,41 @@
+name: Watch Upstream
+
+on:
+  schedule:
+    # 每周一凌晨 3 点（UTC）自动检查官方是否有新版本
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Compare upstream version
+        id: compare
+        run: |
+          upstream=$(curl -s https://api.github.com/repos/deepseek-ai/deepseek-harness/releases/latest | jq -r '.tag_name // empty' 2>/dev/null)
+          if [ -z "$upstream" ] || [ "$upstream" = "null" ]; then
+            upstream=$(curl -s https://api.github.com/repos/deepseek-ai/deepseek-harness/tags | jq -r '.[0].name // empty' 2>/dev/null)
+          fi
+          ours=$(node -p "require('./package.json').dependencies['@deepseek-ai/dsh']")
+          echo "upstream=$upstream"
+          echo "ours=$ours"
+          echo "upstream=$upstream" >> "$GITHUB_OUTPUT"
+          echo "ours=$ours" >> "$GITHUB_OUTPUT"
+
+      - name: Open issue when upstream is newer
+        if: ${{ steps.compare.outputs.upstream != '' && steps.compare.outputs.upstream != steps.compare.outputs.ours && steps.compare.outputs.upstream != format('v{0}', steps.compare.outputs.ours) }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "官方 deepseek-harness 有新版本 ${{ steps.compare.outputs.upstream }}（当前内核 ${{ steps.compare.outputs.ours }}）" \
+            --body "官方 deepseek-harness 已发布 ${{ steps.compare.outputs.upstream }}，我们当前内置内核是 ${{ steps.compare.outputs.ours }}。请评估后跟进发布新版桌面程序。"
