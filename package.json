@@ -67,7 +67,8 @@
       {
         "provider": "github",
         "owner": "zasSYJ",
-        "repo": "deepseek-harness-desktop"
+        "repo": "deepseek-harness-desktop",
+        "releaseType": "release"
       }
     ]
   },
