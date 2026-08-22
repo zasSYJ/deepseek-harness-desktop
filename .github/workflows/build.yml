@@ -50,7 +50,7 @@ jobs:
           $latest = (Get-ChildItem dist -Filter 'latest.yml').FullName
           gh release create $tag $setup $portable $blockmap $latest `
             --title "DeepSeek Harness 桌面版 $tag" `
-            --notes "Windows 桌面版 v$tag`n`n- 安装版（推荐，支持自动更新）：DeepSeek-Harness-Setup-$tag.exe`n- 免安装版：DeepSeek-Harness-桌面版-$tag.exe`n`n详情见 README。"
+            --notes "Windows 桌面版 v$tag`n`n- 安装版（推荐，支持自动更新）：DeepSeek-Harness-Setup-$tag.exe`n- 免安装版：DeepSeek-Harness-Portable-$tag.exe`n`n⭐ 如果觉得好用，欢迎点个 Star 支持一下：https://github.com/zasSYJ/deepseek-harness-desktop`n`n详情见 README。"
 
       - uses: actions/upload-artifact@v4
         with:

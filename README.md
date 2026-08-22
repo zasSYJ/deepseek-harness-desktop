@@ -2,6 +2,10 @@
 
 > 非官方社区封装。把 DeepSeek AI 开源的 [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness) 打包成 Windows 桌面应用，双击即用。
 
+⭐ 如果这个项目对你有帮助，欢迎点个 Star 支持一下！
+
+[![GitHub stars](https://img.shields.io/github/stars/zasSYJ/deepseek-harness-desktop?style=social&label=Star)](https://github.com/zasSYJ/deepseek-harness-desktop)
+
 ## 特性
 
 - 双击即用：无需安装 Node.js，无需命令行
