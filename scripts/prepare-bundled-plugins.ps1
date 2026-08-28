@@ -6,6 +6,11 @@ $tmp = Join-Path $env:TEMP ('dsh-bundle-' + [guid]::NewGuid().ToString('N'))
 $profileDir = Join-Path $tmp 'profile'
 
 New-Item -ItemType Directory -Force -Path $profileDir | Out-Null
+[System.IO.File]::WriteAllText(
+  (Join-Path $profileDir 'pnpm-workspace.yaml'),
+  "packages:`n  - .`n`nnodeLinker: hoisted`nautoInstallPeers: false`n",
+  (New-Object System.Text.UTF8Encoding($false))
+)
 $pkg = @{
   name         = 'dsh-bundle-tmp'
   private      = $true
