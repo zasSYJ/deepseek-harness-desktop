@@ -203,8 +203,76 @@ function switchUpdateFeed() {
   log('更新源:', mirrorIndex < 0 ? 'GitHub 官方' : `国内镜像 ${MIRROR_HOSTS[mirrorIndex]}`);
 }
 
-// 首次启动自动安装插件市场 + 技能库（失败自动跳过，下次启动重试）
+// 安装包内置插件目录（离线可用）
+function bundledPluginsDir() {
+  return app.isPackaged
+    ? path.join(process.resourcesPath, 'bundled-plugins')
+    : path.join(__dirname, 'resources', 'bundled-plugins');
+}
+
+// 把安装包内置的插件市场与技能库（含依赖）复制到用户配置目录，全程无需联网
+function installBundledPlugins() {
+  const srcDir = bundledPluginsDir();
+  if (!fs.existsSync(srcDir)) return false;
+  const profileDir = path.join(app.getPath('home'), '.dsh', 'profiles', 'web');
+  const nmDir = path.join(profileDir, 'node_modules');
+  fs.mkdirSync(nmDir, { recursive: true });
+  const pkgPath = path.join(profileDir, 'package.json');
+  let pkg = null;
+  try {
+    pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+  } catch (e) {
+    pkg = null;
+  }
+  if (!pkg || typeof pkg !== 'object') {
+    pkg = { name: 'dsh-profile-web', private: true, dependencies: {}, dsh: { profile: { bundles: [] } } };
+  }
+  pkg.dependencies = pkg.dependencies || {};
+  pkg.dsh = pkg.dsh || {};
+  pkg.dsh.profile = pkg.dsh.profile || {};
+  pkg.dsh.profile.bundles = pkg.dsh.profile.bundles || [];
+  for (const entry of fs.readdirSync(srcDir, { withFileTypes: true })) {
+    const dest = path.join(nmDir, entry.name);
+    if (!fs.existsSync(dest)) {
+      fs.cpSync(path.join(srcDir, entry.name), dest, { recursive: true });
+    }
+    const infoPath = path.join(dest, 'package.json');
+    try {
+      const info = JSON.parse(fs.readFileSync(infoPath, 'utf8'));
+      if (info && info.name && !pkg.dependencies[info.name]) {
+        pkg.dependencies[info.name] = info.version;
+      }
+    } catch (e) { /* 忽略非包文件 */ }
+  }
+  for (const name of ['dsh-plugin-marketplace', 'dsh-skill-hub']) {
+    if (!pkg.dsh.profile.bundles.includes(name)) {
+      pkg.dsh.profile.bundles.push(name);
+    }
+  }
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
+  return true;
+}
+
+// 首次启动自动安装插件市场 + 技能库：优先用安装包内置文件（离线），失败再走联网
 async function ensureFirstRunPlugins() {
+  try {
+    const userData = app.getPath('userData');
+    const mFlag = path.join(userData, 'marketplace-installed.flag');
+    const sFlag = path.join(userData, 'skillhub-installed.flag');
+    if (fs.existsSync(mFlag) && fs.existsSync(sFlag)) return;
+    if (installBundledPlugins()) {
+      fs.writeFileSync(mFlag, new Date().toISOString());
+      fs.writeFileSync(sFlag, new Date().toISOString());
+      log('插件市场与技能库已从安装包内置完成安装');
+      if (tray && tray.displayBalloon) {
+        tray.displayBalloon({ title: APP_NAME, content: '插件市场与技能库已就绪，重启应用后生效' });
+      }
+      return;
+    }
+    log('未找到内置插件包，改用联网安装');
+  } catch (e) {
+    log('内置插件安装失败，改用联网安装:', e.message);
+  }
   const plugins = [
     { name: '插件市场', flag: 'marketplace-installed.flag', srcs: [...MARKETPLACE_MIRRORS, MARKETPLACE_SRC] },
     { name: '技能库', flag: 'skillhub-installed.flag', srcs: [SKILL_HUB_SRC] }

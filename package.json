@@ -1,6 +1,6 @@
 {
   "name": "deepseek-harness-desktop",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "DeepSeek Harness 桌面版 - 把 dsh Web 打包成 Windows 桌面应用",
   "main": "main.js",
   "author": "DeepSeek Harness Desktop",
@@ -44,6 +44,10 @@
       {
         "from": "resources/node.exe",
         "to": "node.exe"
+      },
+      {
+        "from": "resources/bundled-plugins",
+        "to": "bundled-plugins"
       }
     ],
     "win": {

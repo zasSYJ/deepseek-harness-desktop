@@ -15,3 +15,6 @@ portable-smoke.png
 
 # 根目录成品 exe（发布到 Releases，不进仓库）
 /*.exe
+
+# 构建时生成的内置插件包
+resources/bundled-plugins/

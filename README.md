@@ -15,8 +15,8 @@
 - 单实例：重复打开时聚焦已有窗口
 - 自动启动 / 停止服务，运行日志可查
 - **自动更新（含国内加速）**：启动时自动检查新版本，优先走 GitHub，卡顿或连不上时自动切换国内镜像；下载完成后重启即可更新，无需卸载重装。后续版本均为增量更新，只下载变化的部分
-- **内置插件市场**：首次启动自动安装 [dsh-plugin-marketplace](https://github.com/YELEBAI/dsh-plugin-marketplace)，在「设置 → 插件 → 插件市场」浏览、搜索、一键安装社区插件；市场与插件均可自动更新
-- **内置技能库**：首次启动自动安装 [dsh-skill-hub](https://github.com/cheshireez/dsh-skill-hub)，聚合全网技能目录，可在「技能」页面浏览、安装最新技能
+- **内置插件市场**：已打包进安装包、首次启动即自动就绪（无需联网）的 [dsh-plugin-marketplace](https://github.com/YELEBAI/dsh-plugin-marketplace)，在「设置 → 插件 → 插件市场」浏览、搜索、一键安装社区插件；市场与插件均可自动更新
+- **内置技能库**：已打包进安装包、首次启动即自动就绪（无需联网）的 [dsh-skill-hub](https://github.com/cheshireez/dsh-skill-hub)，聚合全网技能目录，可在「技能」页面浏览、安装最新技能
 - **精简优化**：安装包已剔除用不到的开发文件（源码地图、说明文档、测试文件等），体积更小、安装更快，功能一个不少
 
 ## 下载
