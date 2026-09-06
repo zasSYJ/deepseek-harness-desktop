@@ -54,9 +54,18 @@ jobs:
           $portable = (Get-ChildItem dist -Filter 'DeepSeek-Harness-Portable-*.exe').FullName
           $blockmap = (Get-ChildItem dist -Filter '*.blockmap').FullName
           $latest = (Get-ChildItem dist -Filter 'latest.yml').FullName
+          $notesFile = Join-Path $env:RUNNER_TEMP 'release-notes.md'
+          $changelog = Get-Content (Join-Path $PWD 'CHANGELOG.md') -Raw -ErrorAction SilentlyContinue
+          $match = [regex]::Match($changelog, "(?ms)^##\s*" + [regex]::Escape($tag) + "\s*\r?\n(.+?)(?=^##\s|\z)")
+          if ($match.Success) {
+            $notesText = $match.Groups[1].Value.Trim()
+          } else {
+            $notesText = "Windows Desktop $tag`n`nSee README: https://github.com/zasSYJ/deepseek-harness-desktop"
+          }
+          [System.IO.File]::WriteAllText($notesFile, $notesText, (New-Object System.Text.UTF8Encoding($false)))
           gh release create $tag $setup $portable $blockmap $latest `
-            --title "DeepSeek Harness 桌面版 $tag" `
-            --notes "Windows 桌面版 $tag`n`n🔥 本次更新`n- 🖼️ 识图能力：适配 DeepSeek 最新多模态模型 DeepSeek-V4-Flash-Vision-Exp`n- 📚 内置技能库 + 插件市场（已打包进安装包，首次启动即就绪，无需联网）`n- ⚡ 国内加速 + 自动更新 + 安装提速`n`n- 安装版（推荐，支持自动更新）：DeepSeek-Harness-Setup-$ver.exe`n- 免安装版：DeepSeek-Harness-Portable-$ver.exe`n`n⭐ 如果觉得好用，欢迎点个 Star 支持一下：https://github.com/zasSYJ/deepseek-harness-desktop`n`n详情见 README。"
+            --title "DeepSeek Harness Desktop $tag" `
+            --notes-file $notesFile
 
       - uses: actions/upload-artifact@v4
         with:
