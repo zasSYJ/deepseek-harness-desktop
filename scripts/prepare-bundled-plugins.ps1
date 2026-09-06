@@ -1,4 +1,3 @@
-# 构建前准备：把插件市场与技能库（含依赖）内置进安装包
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $out = Join-Path $root 'resources\bundled-plugins'
@@ -41,5 +40,5 @@ Get-ChildItem (Join-Path $profileDir 'node_modules') -Force -Directory |
   }
 
 $sz = (Get-ChildItem $out -Recurse -File | Measure-Object Length -Sum).Sum
-Write-Output ("已生成内置插件包目录: " + $out + "（" + [math]::Round($sz/1MB,1) + " MB）")
+Write-Output ("Bundled plugins ready at: " + $out + " (" + [math]::Round($sz/1MB,1) + " MB)")
 Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue

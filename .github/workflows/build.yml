@@ -30,7 +30,7 @@ jobs:
       - name: Prepare bundled plugins
         shell: pwsh
         run: |
-          powershell -ExecutionPolicy Bypass -File scripts\prepare-bundled-plugins.ps1
+          & scripts\prepare-bundled-plugins.ps1
 
       - name: Bundle Node runtime
         shell: pwsh
