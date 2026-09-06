@@ -10,18 +10,18 @@ const { newUrlFromBase, getChannelFilename } = require('electron-updater/out/uti
 
 const DEFAULT_PORT = 3080;
 const APP_NAME = 'DeepSeek Harness';
-const MARKETPLACE_SRC = 'github:YELEBAI/dsh-plugin-marketplace#v0.9.2';
+const MARKETPLACE_SRC = 'github:YELEBAI/dsh-plugin-marketplace#v0.9.4';
 // 插件市场在国内直连 GitHub 常被重置，先尝试加速镜像下载
 const MARKETPLACE_MIRRORS = [
-  'https://ghproxy.net/https://github.com/YELEBAI/dsh-plugin-marketplace/archive/refs/tags/v0.9.2.tar.gz',
-  'https://gh-proxy.com/https://github.com/YELEBAI/dsh-plugin-marketplace/archive/refs/tags/v0.9.2.tar.gz',
-  'https://ghfast.top/https://github.com/YELEBAI/dsh-plugin-marketplace/archive/refs/tags/v0.9.2.tar.gz'
+  'https://gh-proxy.com/https://github.com/YELEBAI/dsh-plugin-marketplace/archive/refs/tags/v0.9.4.tar.gz',
+  'https://ghproxy.net/https://github.com/YELEBAI/dsh-plugin-marketplace/archive/refs/tags/v0.9.4.tar.gz',
+  'https://ghfast.top/https://github.com/YELEBAI/dsh-plugin-marketplace/archive/refs/tags/v0.9.4.tar.gz'
 ];
 const SKILL_HUB_SRC = 'dsh-skill-hub';
 const UPDATE_OWNER = 'zasSYJ';
 const UPDATE_REPO = 'deepseek-harness-desktop';
 // 国内加速镜像域名（按顺序尝试）
-const MIRROR_HOSTS = ['ghproxy.net', 'gh-proxy.com', 'ghfast.top'];
+const MIRROR_HOSTS = ['gh-proxy.com', 'ghproxy.net', 'ghfast.top'];
 
 let mainWindow = null;
 let tray = null;
@@ -123,9 +123,9 @@ async function startServer() {
   serverProcess.stdout.on('data', (d) => {
     const text = d.toString();
     log('[dsh]', text.trim());
-    const m = text.match(/https?:\/\/127\.0\.0\.1:(\d+)/);
+    const m = text.match(/https?:\/\/127\.0\.0\.1:\d+[^\s]*/);
     if (m && !serverUrl) {
-      serverUrl = `http://127.0.0.1:${m[1]}`;
+      serverUrl = m[0].trim();
     }
   });
   serverProcess.stderr.on('data', (d) => log('[dsh-err]', d.toString().trim()));
@@ -137,17 +137,14 @@ async function startServer() {
     }
   });
 
-  const url = serverUrl || `http://127.0.0.1:${DEFAULT_PORT}`;
-  try {
-    await waitForServer(url);
-  } catch (e) {
-    if (serverUrl) {
-      await waitForServer(serverUrl);
-    } else {
-      throw e;
-    }
+  // 等待 dsh 输出带令牌的完整地址（最长 60 秒），避免窗口抢先用无令牌地址打开导致黑屏
+  const waitStarted = Date.now();
+  while (!serverUrl && Date.now() - waitStarted < 60000) {
+    await new Promise((r) => setTimeout(r, 300));
   }
-  return serverUrl || url;
+  const url = serverUrl || `http://127.0.0.1:${DEFAULT_PORT}`;
+  await waitForServer(url);
+  return url;
 }
 
 // 镜像版更新源：让 electron-updater 的 GitHub 源整体走国内加速镜像

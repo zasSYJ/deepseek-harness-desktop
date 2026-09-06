@@ -1,4 +1,4 @@
-﻿# 构建前准备：把插件市场与技能库（含依赖）内置进安装包
+# 构建前准备：把插件市场与技能库（含依赖）内置进安装包
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $out = Join-Path $root 'resources\bundled-plugins'
@@ -15,8 +15,8 @@ $pkg = @{
   name         = 'dsh-bundle-tmp'
   private      = $true
   dependencies = @{
-    'dsh-skill-hub'          = '^0.2.2'
-    'dsh-plugin-marketplace' = 'github:YELEBAI/dsh-plugin-marketplace#v0.9.2'
+    'dsh-skill-hub'          = '0.3.8'
+    'dsh-plugin-marketplace' = 'github:YELEBAI/dsh-plugin-marketplace#v0.9.4'
   }
 } | ConvertTo-Json -Depth 5
 [System.IO.File]::WriteAllText(
