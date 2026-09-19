@@ -14,7 +14,7 @@ $pkg = @{
   name         = 'dsh-bundle-tmp'
   private      = $true
   dependencies = @{
-    'dsh-skill-hub'          = '0.3.8'
+    'dsh-skill-hub'          = '0.3.14'
     'dsh-plugin-marketplace' = 'github:YELEBAI/dsh-plugin-marketplace#v0.9.4'
   }
 } | ConvertTo-Json -Depth 5

@@ -1,5 +1,19 @@
 # 更新日志
 
+## v1.3.0
+
+Windows 桌面版 v1.3.0
+
+🔥 本次更新
+- ⚙️ 内核升级：DeepSeek Harness 官方内核升至 0.1.5-rc.2（官方 npm 推荐版本，9 月 10 日发布）
+- 🧩 组件同步：补齐官方新增组件（文件上传、HTTP 代理、消息反馈等），功能更完整
+- 📚 插件升级：技能库升至 0.3.14、插件市场保持最新 v0.9.4，均已内置在安装包，装好即用
+- 🚀 更新通道优化：国内镜像自动切换，下载更稳
+
+- 安装版（推荐，支持自动更新）：DeepSeek-Harness-Setup-1.3.0.exe
+- 免安装版：DeepSeek-Harness-Portable-1.3.0.exe
+
+⭐ 如果觉得好用，欢迎点个 Star 支持一下：https://github.com/zasSYJ/deepseek-harness-desktop
 ## v1.2.0
 
 Windows 桌面版 v1.2.0
